@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple, modern Bookmark Manager to save and organize your favorite websites.">
+    <title>Bookmark Manager</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="container header-content">
+            <div class="header-titles">
+                <h1><i class="fa-solid fa-bookmark"></i> Bookmark Manager</h1>
+                <p class="subtitle">Save, organize, and quickly access your favorite websites all in one place.</p>
+            </div>
+
+            <div class="header-actions">
+                <!-- Shown only when signed in -->
+                <div class="user-chip" id="user-chip" hidden>
+                    <img id="user-avatar" class="user-avatar" alt="" width="32" height="32"
+                        referrerpolicy="no-referrer">
+                    <span id="user-name" class="user-name"></span>
+                    <button id="signout-btn" class="btn btn-icon" title="Sign out" aria-label="Sign out">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+
+                <button id="theme-toggle" class="btn btn-icon theme-toggle" title="Toggle dark mode"
+                    aria-label="Toggle dark mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- SIGN-IN (shown when signed out) -->
+        <section id="auth-section" class="card auth-card" aria-labelledby="auth-title">
+            <i class="fa-solid fa-lock auth-icon" aria-hidden="true"></i>
+            <h2 id="auth-title" class="section-title">Sign in to see your bookmarks</h2>
+            <p class="helper-text">Your bookmarks are private to your Google account. Nobody else can read them.</p>
+            <button id="signin-btn" class="btn btn-primary">
+                <i class="fa-brands fa-google"></i> Continue with Google
+            </button>
+            <p id="auth-error" class="form-error" role="alert" hidden></p>
+        </section>
+
+        <!-- APP (shown when signed in) -->
+        <div id="app-content" hidden>
+
+            <!-- ADD / EDIT FORM -->
+            <section class="add-bookmark-section card" aria-labelledby="add-bookmark-title">
+                <h2 id="add-bookmark-title" class="section-title">Add New Bookmark</h2>
+                <p class="helper-text">Enter the details below to add a new site to your collection.</p>
+
+                <form id="bookmark-form" class="bookmark-form" novalidate>
+                    <div class="form-group">
+                        <label for="site-name">Website Name</label>
+                        <input type="text" id="site-name" name="site-name" placeholder="e.g., Google, GitHub, My Blog"
+                            maxlength="100" required autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="site-url">Website URL</label>
+                        <input type="text" id="site-url" name="site-url" inputmode="url"
+                            placeholder="example.com or https://example.com" maxlength="2000" required
+                            autocomplete="off">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="site-category">Category</label>
+                        <select id="site-category" name="site-category" class="form-control">
+                            <option value="general">General</option>
+                            <option value="work">💼 Work</option>
+                            <option value="personal">🏠 Personal</option>
+                            <option value="learning">📚 Learning</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" id="add-btn" class="btn btn-primary"
+                            title="Click to save this bookmark to your list">
+                            <i class="fa-solid fa-plus"></i> Add Bookmark
+                        </button>
+                        <button type="button" id="cancel-btn" class="btn btn-secondary" hidden>Cancel</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- SEARCH + FILTERS -->
+            <section class="search-section" aria-labelledby="search-title">
+                <h2 id="search-title" class="sr-only">Search Bookmarks</h2>
+                <div class="search-container">
+                    <label for="search-input" class="sr-only">Search bookmarks</label>
+                    <i class="fa-solid fa-search search-icon"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="Search your bookmarks..."
+                        autocomplete="off">
+                </div>
+
+                <div class="filter-bar" id="filter-bar" role="group" aria-label="Filter by category">
+                    <button type="button" class="chip active" data-cat="all">All</button>
+                    <button type="button" class="chip" data-cat="general">General</button>
+                    <button type="button" class="chip" data-cat="work">💼 Work</button>
+                    <button type="button" class="chip" data-cat="personal">🏠 Personal</button>
+                    <button type="button" class="chip" data-cat="learning">📚 Learning</button>
+                </div>
+            </section>
+
+            <!-- BOOKMARKS -->
+            <section class="bookmarks-display-section" aria-labelledby="my-bookmarks-title">
+                <div class="toolbar">
+                    <h2 id="my-bookmarks-title" class="section-title">My Bookmarks <span id="count-badge"
+                            class="count-badge">0</span></h2>
+                    <button type="button" id="export-btn" class="btn btn-secondary btn-sm"
+                        title="Download all your bookmarks as a JSON file">
+                        <i class="fa-solid fa-download"></i> Export
+                    </button>
+                </div>
+
+                <div id="bookmarks-container" class="bookmarks-grid"></div>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="app-footer">
+        <div class="container">
+            <p>&copy; <span id="year"></span> Bookmark Manager. Built for learning web development.</p>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

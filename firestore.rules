@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Each user can only touch their own bookmarks
+    match /users/{uid}/bookmarks/{id} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'url', 'category', 'pinned', 'createdAt', 'updatedAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0 && request.resource.data.name.size() <= 100
+        && request.resource.data.url is string
+        && request.resource.data.url.size() <= 2000
+        && request.resource.data.url.matches('^https?://.*')
+        && request.resource.data.category in ['general', 'work', 'personal', 'learning']
+        && (!('pinned' in request.resource.data) || request.resource.data.pinned is bool);
+    }
+
+    // Everything else is closed
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
