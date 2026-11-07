@@ -1,4 +1,4 @@
-# Bookmark Manager
+# 🔖 LinkNest — Bookmark Manager
 
 A fast, private bookmark manager. Sign in with Google, save and organize your favorite sites, and access them from any device.
 
